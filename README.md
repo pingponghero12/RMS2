@@ -4,7 +4,7 @@ RMS2 is a better version of Rocket Motor Simulator, written in Python.
 
 ## Overview
 
-RMS2 is designed to simulate the behavior of stable-fuel rocket engines.
+RMS2 is designed to simulate the behavior of stable-fuel rocket engines for BATES geometries.
 
 ## Documentation
 
