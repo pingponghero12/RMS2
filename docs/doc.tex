@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{amsmath}
+\usepackage[margin=2.5cm]{geometry}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\title{Simulation of solid fuel engine}
+\author{Manfred Gawlas}
+\date{19.01.2024}
+
+\begin{document}
+\maketitle
+
+\section{Calculations regarding engine thrust}
+\subsection{Thrust}
+We calculate engine thrust by usage of following equation, which as input takes $P_{ch}, A_t$ and $P_e$.
+\begin{equation}
+F=A_tP_0\sqrt{\frac{2k^2}{k-1}\left(\frac{2}{k+1}\right)^{\frac{k+1}{k-1}}\left[1-\left(\frac{P_e}{P_0}\right)^{\frac{k-1}{k}}\right]} + A_e(P_e - P_a)
+\end{equation}
+
+\subsection{Exit pressure}
+Unfortunately, we don't have $P_e$ so we need to calculate it numerically from following equation for expansion ratio.
+\begin{equation}
+E = \frac{A_t}{A_e}=\left(\frac{k+1}{2}\right)^{\frac{1}{k-1}}\left(\frac{P_e}{P_0}\right)^{\frac{1}{k}}\sqrt{\left(\frac{k+1}{k-1}\right)\left[1-\left(\frac{P_e}{P_0}\right)^{\frac{k-1}{k}}\right]}
+\end{equation}
+Where E is:
+$$E = \frac{A_t}{A_e} = \frac{1}{\mbox{Expansion ratio}}$$
+Numerical calculations will be performed by taking the minimum of $\Delta E$ in order to obtain the corresponding $P_e$ for which, upon substitution into the formula, we will achieve a value closest to the E calculated from the nozzle parameters.
+
+\begin{equation}
+0 \approx \Delta E = \left| E - \left(\frac{k+1}{2}\right)^{\frac{1}{k-1}}\left(\frac{P_e}{P_0}\right)^{\frac{1}{k}}\sqrt{\left(\frac{k+1}{k-1}\right)\left[1-\left(\frac{P_e}{P_0}\right)^{\frac{k-1}{k}}\right]}  \right|
+\end{equation}
+
+\section{Calulations regarding engine chamber parameters}
+Calculations related to the combustion chamber focus on a key equation for solid fuel rocket engines, namely the equation for pressure in the chamber.
+\begin{equation}
+P_{ch}(A_b)=K_n^{\frac{1}{1-n}}(c^*\rho_pa)^{\frac{1}{1-n}}, \qquad K_n = \frac{A_b}{A_t}
+\end{equation}
+Therefore, we treat $P_{ch}$ as a function of $A_b$. To conduct simulations, we need the function $A_b(x)$, where x is the burn distance. Since this simulator considers only the BATES geometry, below is the formula for precisely this geometry.
+\begin{equation}
+A_b(x) = 2\pi N ((R+x)(L-2x) + \left(\frac{D}{2}\right)^2 - (R+x)^2)
+\end{equation}
+Where $R = d_p/2$ and D is external grain diameter, L is lenght of one segment and N is number of segments.\\\\
+When it comes to computation of x, we solve it numerically. That means using rectangle method of solving integrals. In this case it's a simple one.
+\begin{equation}
+x(t) = \int^{t_c}_0 r dt = \sum r \Delta t
+\end{equation}
+Where regresion rate r is a function of $P_ch$, therefore for each $t_c+=\Delta t$ we will calculate new value of regression, which we will use for corresponding addition to burn distance.
+$$r(P_{ch}) = a(P_{ch})^n$$
+As a closing I want to also mention that we use exactly same method to calculate total impuls, that is simple numerical integration.
+
+\end{document}
